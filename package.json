@@ -1,0 +1,27 @@
+{
+  "name": "multi-tower-defense",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "npx nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "elo-rank": "^1.0.4",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0",
+    "protobufjs": "^7.4.0",
+    "redis": "^4.7.0",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prettier": "^3.4.2"
+  }
+}
