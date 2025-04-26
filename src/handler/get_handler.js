@@ -1,6 +1,7 @@
 import { sendData } from '../server.js';
 
 export const getDataHandler = async (data, client) => {
+  let isSucces = true;
   try {
     const startIndex = (data.page - 1) * data.count;
     const endIndex = startIndex + data.count;
@@ -21,8 +22,11 @@ export const getDataHandler = async (data, client) => {
     }
     sendData(requestServerId, {
       marketData,
+      isSucces,
     });
   } catch (err) {
-    console.error(err);
+    sendData(requestServerId, {
+      isSucces,
+    });
   }
 };

@@ -1,4 +1,4 @@
-import { CLIENT_VERSION, HOST, PORT } from '../constants/env.js';
+import { CLIENT_VERSION, HOST, PORT } from '../config/env.js';
 import {
   DB1_NAME,
   DB1_USER,
@@ -31,5 +31,9 @@ export const config = {
     name: REDIS_NAME,
     host: REDIS_HOST,
     port: REDIS_PORT,
+  },
+  type: {
+    buy: 'BUY',
+    sell: 'SELL',
   },
 };

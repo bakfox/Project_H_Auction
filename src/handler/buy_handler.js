@@ -1,13 +1,18 @@
+import { config } from '../config/config.js';
 import { sellInMarket } from '../db/marketplace/market.db.js';
 import { dataDelet, getdata, sendData } from '../server.js';
 
-export const buyHandler = async (data) => {
+export const buyHandler = async (jsonData) => {
+  let isSuccess = true;
   try {
+    const data = JSON.parse(jsonData);
     const marketData = getdata(data.marketId);
     if (!marketData) {
+      isSuccess = false;
       throw new Error('더이상 존재하지 않는 물품입니다.');
     }
     if (data.gold < marketData.price) {
+      isSuccess = false;
       throw new Error('골드가 부족합니다.');
     }
     const requestServerId = data.senderId;
@@ -21,12 +26,16 @@ export const buyHandler = async (data) => {
       gold: marketData.price,
     });
     dataDelet(data.marketId, marketData.name);
-    sendData(requestServerId, {
+    sendData(config.type.buy,requestServerId, {
       insertId: itemData[0].insertId,
       id: marketData.itemIndex,
       rarity: marketData.rarity,
+      gold: marketData.price,
+      isSuccess,
     });
   } catch (err) {
-    console.error(err);
+    sendData(requestServerId, {
+      isSuccess,
+    });
   }
 };

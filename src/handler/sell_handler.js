@@ -1,12 +1,15 @@
+import { config } from '../config/config.js';
 import { sendData } from '../server.js';
 
 export const sellHandler = async (data) => {
+  let isSuccess = true;
+  const requestServerId = data.senderId;
   try {
     const [itemData] = getInventoryFromCharId(data.charId, data.inventoryId);
     if (!itemData) {
+      isSuccess = false;
       throw new Error('인벤토리에 데이터가 없습니다.');
     }
-    const requestServerId = data.senderId;
 
     const now = new Date(Date.now() + 60 * 60 * 1000);
     const [marketData] = await addMarket({
@@ -18,6 +21,7 @@ export const sellHandler = async (data) => {
       endTime: now,
     });
     if (!marketData) {
+      isSuccess = false;
       throw new Error('거래 실패입니다!');
     }
     new marketData({
@@ -29,8 +33,14 @@ export const sellHandler = async (data) => {
       endTime: now,
       name: data.name,
     });
-    sendData(requestServerId, { charId: data.charId, inventoryId: data.inventoryId });
+    sendData(config.type.sell, requestServerId, {
+      charId: data.charId,
+      inventoryId: data.inventoryId,
+      isSuccess,
+    });
   } catch (err) {
-    console.error(err);
+    sendData(requestServerId, {
+      isSuccess,
+    });
   }
 };

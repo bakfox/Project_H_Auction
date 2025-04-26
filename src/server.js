@@ -28,31 +28,16 @@ async function listenForMessages() {
   await Promise.all([
     (async () => {
       while (true) {
-        const res = await client.blPop('Sell', 0);
-        const message = JSON.parse(res.element);
+        const res = await client.blPop('SELL', 0);
+        const message = JSON.parse(res);
         sellHandler(message);
       }
     })(),
     (async () => {
       while (true) {
-        const res = await client.blPop('Buy', 0);
-        const message = JSON.parse(res.element);
+        const res = await client.blPop('BUY', 0);
+        const message = JSON.parse(res);
         buyHandler(message);
-      }
-    })(),
-    (async () => {
-      while (true) {
-        const res = await client.blPop('Get', 0);
-        const message = JSON.parse(res.element);
-        getDataHandler(message, client);
-      }
-    })(),
-    (async () => {
-      while (true) {
-        //검색 기능 따로 한 이유 : 검색을 이용하는 사람보다 그냥 이용하는 사람이 많을거 같아서.
-        const res = await client.blPop('GetSearch', 0);
-        const message = JSON.parse(res.element);
-        getSearchDataHandler(message, client);
       }
     })(),
   ]);
@@ -61,16 +46,15 @@ async function listenForMessages() {
 //아래는 그 레디스 연결 이용해서 하는 용도 입니다.
 
 /**레디스 데이터 보내기 용도!*/
-async function sendData(targetServerId, data) {
+export async function sendData(targetServerId, data, type) {
   if (!targetServerId) {
     console.log('서버가 없습니다.');
     return;
   }
   // 자기 자신 서버 리스폰 구독하면 받을수 있음
   message.senderId = serverId;
-  await client.rPush(`Response:${targetServerId}`, JSON.stringify(data));
+  await client.rPush(type + `:RES:${targetServerId}`, JSON.stringify(data));
 }
-export default sendData;
 
 /**레디스 데이터 지우기 용도!*/
 export const dataDelet = async (id, name) => {
@@ -81,10 +65,6 @@ export const dataDelet = async (id, name) => {
 /**레디스 해당 id 데이터 가져오기 */
 export const getdata = async (id) => {
   return await client.hGetAll(id);
-};
-/**레디스 현재 저장 데이터 길이찾기*/
-export const getSize = async () => {
-  return await client.lLen('marketList');
 };
 /**레디스 데이터 넣기 용도!*/
 export const setData = async (data) => {
