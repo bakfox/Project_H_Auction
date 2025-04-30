@@ -19,14 +19,14 @@ class MarketData {
       this.endData();
     }
   }
-  endData() {
+  async endData() {
     cancelMarket({
       marketId: this.id,
       charId: this.charId,
       itemId: this.itemIndex,
       rarity: this.rarity,
     });
-    dataDelet(this.id, this.name);
+    await dataDelet(this.id, this.name);
   }
 }
 export default MarketData;

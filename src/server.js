@@ -58,7 +58,7 @@ export async function sendData(targetServerId, data, type) {
 
 /**레디스 데이터 지우기 용도!*/
 export const dataDelet = async (id, name) => {
-  await client.hDel(id);
+  await client.del(id);
   await client.lRem('marketList', 1, id);
   await client.sRem('index:name:' + name, id);
 };
