@@ -84,7 +84,7 @@ export const cancelMarket = async (data) => {
       1,
       null,
     ]);
-    await connection.execute(SQL_QUERIES.REMOVE_MARKET_DATA, [data.makrketId]);
+    await connection.execute(SQL_QUERIES.REMOVE_MARKET_DATA, [data.marketId]);
     await connection.commit();
   } catch (err) {
     console.log(err);
