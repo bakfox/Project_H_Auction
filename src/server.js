@@ -58,7 +58,15 @@ export async function sendData(targetServerId, data, type) {
 
 /**레디스 데이터 지우기 용도!*/
 export const dataDelet = async (id, name) => {
-  await client.del(id);
+  const key = String(id);
+
+  const exists = await client.exists(key);
+  if (!exists) {
+    console.warn("현재 데이터 없음");
+    return;
+  }
+  
+  await client.del(key);
   await client.lRem('marketList', 1, id);
   await client.sRem('index:name:' + name, id);
 };
