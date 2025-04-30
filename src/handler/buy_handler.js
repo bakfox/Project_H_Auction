@@ -6,7 +6,7 @@ export const buyHandler = async (jsonData) => {
   let isSuccess = true;
   try {
     const data = JSON.parse(jsonData);
-    const marketData = getdata(data.marketId);
+    const marketData = await getdata(data.marketId);
     if (!marketData) {
       isSuccess = false;
       throw new Error('더이상 존재하지 않는 물품입니다.');
@@ -25,7 +25,7 @@ export const buyHandler = async (jsonData) => {
       marketId: data.marketId,
       gold: marketData.price,
     });
-    dataDelet(data.marketId, marketData.name);
+    await dataDelet(data.marketId, marketData.name);
     sendData(config.type.buy,requestServerId, {
       insertId: itemData[0].insertId,
       id: marketData.itemIndex,

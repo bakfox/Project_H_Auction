@@ -1,18 +1,20 @@
+import MarketData from '../class/MarketData.class.js';
 import { config } from '../config/config.js';
+import { getInventoryFromCharId } from '../db/marketplace/market.db.js';
 import { sendData } from '../server.js';
 
 export const sellHandler = async (data) => {
   let isSuccess = true;
   const requestServerId = data.senderId;
   try {
-    const [itemData] = getInventoryFromCharId(data.charId, data.inventoryId);
+    const [itemData] = await getInventoryFromCharId(data.charId, data.inventoryId);
     if (!itemData) {
       isSuccess = false;
       throw new Error('인벤토리에 데이터가 없습니다.');
     }
 
     const now = new Date(Date.now() + 60 * 60 * 1000);
-    const [marketData] = await addMarket({
+    const [makretDatas] = await addMarket({
       charId: data.charId,
       inventoryId: data.inventoryId,
       itemIndex: itemData.itemId,
@@ -20,12 +22,12 @@ export const sellHandler = async (data) => {
       price: data.gold,
       endTime: now,
     });
-    if (!marketData) {
+    if (!makretDatas) {
       isSuccess = false;
       throw new Error('거래 실패입니다!');
     }
-    new marketData({
-      id: marketData.insertId,
+    new MarketData({
+      id: makretDatas.insertId,
       charId: data.charId,
       itemIndex: itemData.itemId,
       upgrade: itemData.rarity,
@@ -39,7 +41,7 @@ export const sellHandler = async (data) => {
       isSuccess,
     });
   } catch (err) {
-    sendData(requestServerId, {
+    sendData(config.type.sell,requestServerId, {
       isSuccess,
     });
   }

@@ -1,7 +1,7 @@
 import { cancelMarket } from '../db/marketplace/market.db.js';
 import { dataDelet, setData } from '../server.js';
 
-class marketData {
+class MarketData {
   constructor(data) {
     this.id = data.id;
     this.charId = data.charId;
@@ -21,7 +21,7 @@ class marketData {
   }
   endData() {
     cancelMarket({
-      makrketId: this.id,
+      marketId: this.id,
       charId: this.charId,
       itemId: this.itemIndex,
       rarity: this.rarity,
@@ -29,4 +29,4 @@ class marketData {
     dataDelet(this.id, this.name);
   }
 }
-export default marketData;
+export default MarketData;
