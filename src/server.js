@@ -82,7 +82,7 @@ export const setData = async (data) => {
     'price',
     data.price,
     'endTime',
-    data.endTime,
+    data.endTime.toISOString(),
   );
   //인덱스 추가
   await client.sAdd('index:name:' + data.name, data.id);
