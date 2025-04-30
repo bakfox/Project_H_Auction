@@ -12,8 +12,8 @@ class MarketData {
     this.endTime = data.endTime;
     this.delay = this.endTime - new Date(); // 남은 시간 계산 (밀리초)
     console.log(this.id, ' 가 새션에 들어감!');
-    setData(this);
     if (this.delay > 0) {
+      setData(this);
       setTimeout(this.endData.bind(this), this.delay);
     } else {
       this.endData();
