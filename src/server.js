@@ -68,6 +68,7 @@ export const getdata = async (id) => {
 };
 /**레디스 데이터 넣기 용도!*/
 export const setData = async (data) => {
+  console.log(data);
   await client.hSet(
     data.id,
     'charId',
