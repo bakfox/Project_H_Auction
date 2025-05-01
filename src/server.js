@@ -18,7 +18,7 @@ client.on('error', (err) => console.log('Redis Error:', err));
 
 client.on('connect', () => {
   console.log('Redis 서버와 연결되었습니다.');
-  listenForMessages().catch(console.error); // 연결되었을 때 대기 시작
+  listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
 });
 
 await client.connect();
@@ -29,13 +29,13 @@ await client.flushDb();
 initMarketSesion();
 
 // 대기 처리
-async function listenForMessages() {
+async function listenForMessages(redisClient) {
   await Promise.all([
     (async () => {
       while (true) {
         try {
           console.log("대기중 sell");
-          const res = await client.blPop('SELL', 0);
+          const res = await redisClient.blPop('SELL', 0);
           if (!res || res.length < 2) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
@@ -52,7 +52,7 @@ async function listenForMessages() {
       while (true) {
         try {
           console.log("대기중 buy");
-          const res = await client.blPop('BUY', 0);
+          const res = await redisClient.blPop('BUY', 0);
           console.log("받은 BUY 메시지:", res);
           if (!res || res.length < 2) {
             console.warn("BUY 응답 형식이 이상함:", res);
