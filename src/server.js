@@ -30,7 +30,7 @@ async function listenForMessages() {
       while (true) {
         console.log("대기중 sell");
         const res = await client.blPop('SELL', 0);
-        const message = JSON.parse(res);
+        const message = JSON.parse(res[1]);
         console.log(message);
         sellHandler(message);
       }
@@ -39,7 +39,7 @@ async function listenForMessages() {
       while (true) {
         console.log("대기중 buy");
         const res = await client.blPop('BUY', 0);
-        const message = JSON.parse(res);
+        const message = JSON.parse(res[1]);
         console.log(message);
         buyHandler(message);
       }
