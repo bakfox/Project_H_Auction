@@ -19,18 +19,18 @@ export const buyHandler = async (jsonData) => {
 
     const itemData = await sellInMarket({
       BuyCharId: data.charId,
-      SellCharId: marketData.charId,
-      itemId: marketData.itemIndex,
-      rarity: marketData.rarity,
+      SellCharId: Number(marketData.charId),
+      itemId: Number(marketData.itemIndex),
+      rarity: Number(marketData.rarity),
       marketId: data.marketId,
-      gold: marketData.price,
+      gold: Number(marketData.price),
     });
     await dataDelet(data.marketId, marketData.name);
     sendData(config.type.buy,requestServerId, {
       insertId: itemData[0].insertId,
-      id: marketData.itemIndex,
-      rarity: marketData.rarity,
-      gold: marketData.price,
+      id: Number(marketData.itemIndex),
+      rarity: Number(marketData.rarity),
+      gold: Number(marketData.price),
       isSuccess,
     });
   } catch (err) {
