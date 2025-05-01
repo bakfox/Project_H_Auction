@@ -28,21 +28,36 @@ async function listenForMessages() {
   await Promise.all([
     (async () => {
       while (true) {
-        console.log("대기중 sell");
-        const res = await client.blPop('SELL', 0);
-        const message = JSON.parse(res[1]);
-        console.log(message);
-        sellHandler(message);
+        try {
+          console.log("대기중 sell");
+          const res = await client.blPop('SELL', 0);
+          if (!res || res.length < 2) {
+            console.warn("SELL 응답 형식이 이상함:", res);
+            continue;
+          }
+          const message = JSON.parse(res[1]);
+          console.log("받은 SELL 메시지:", message);
+          await sellHandler(message);
+        } catch (err) {
+          console.error("SELL 처리 중 오류:", err);
+        }
       }
     })(),
     (async () => {
       while (true) {
-        console.log("대기중 buy");
-        const res = await client.blPop('BUY', 0);
-        console.log(res);
-        const message = JSON.parse(res[1]);
-        console.log(message);
-        buyHandler(message);
+        try {
+          console.log("대기중 buy");
+          const res = await client.blPop('BUY', 0);
+          if (!res || res.length < 2) {
+            console.warn("BUY 응답 형식이 이상함:", res);
+            continue;
+          }
+          const message = JSON.parse(res[1]);
+          console.log("받은 BUY 메시지:", message);
+          await buyHandler(message);
+        } catch (err) {
+          console.error("BUY 처리 중 오류:", err);
+        }
       }
     })(),
   ]);
