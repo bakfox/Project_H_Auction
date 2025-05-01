@@ -118,4 +118,7 @@ export const setData = async (data) => {
   await client.rPush('marketList', data.id);
 };
 
-await listenForMessages().catch(console.error);
+client.on('connect', () => {
+  console.log('Redis 서버와 연결되었습니다.');
+  listenForMessages().catch(console.error); // 연결되었을 때 대기 시작
+});
