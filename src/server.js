@@ -118,4 +118,4 @@ export const setData = async (data) => {
   await client.rPush('marketList', data.id);
 };
 
-listenForMessages().catch(console.error);
+await listenForMessages().catch(console.error);
