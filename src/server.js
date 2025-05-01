@@ -67,7 +67,7 @@ async function listenForMessages() {
 //아래는 그 레디스 연결 이용해서 하는 용도 입니다.
 
 /**레디스 데이터 보내기 용도!*/
-export async function sendData(targetServerId, data, type) {
+export async function sendData(type,targetServerId, data ) {
   if (!targetServerId) {
     console.log('서버가 없습니다.');
     return;
