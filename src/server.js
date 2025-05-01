@@ -10,7 +10,7 @@ import { initMarketSesion } from './util/market/getAllData.js';
 dotenv.config();
 
 const client = createClient({
-  url: config.redis.name + config.redis.host +":"+ config.redis.port, // 로컬 Redis 서버 연결
+  url: `redis://${config.redis.host}:${config.redis.port}`, // 로컬 Redis 서버 연결
 });
 
 //에러 처리용도
