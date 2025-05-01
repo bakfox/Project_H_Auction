@@ -39,6 +39,7 @@ async function listenForMessages() {
       while (true) {
         console.log("대기중 buy");
         const res = await client.blPop('BUY', 0);
+        console.log(res);
         const message = JSON.parse(res[1]);
         console.log(message);
         buyHandler(message);
