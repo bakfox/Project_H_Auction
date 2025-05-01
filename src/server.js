@@ -16,6 +16,11 @@ const client = createClient({
 //에러 처리용도
 client.on('error', (err) => console.log('Redis Error:', err));
 
+client.on('connect', () => {
+  console.log('Redis 서버와 연결되었습니다.');
+  listenForMessages().catch(console.error); // 연결되었을 때 대기 시작
+});
+
 await client.connect();
 console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
 
@@ -117,8 +122,3 @@ export const setData = async (data) => {
   await client.sAdd('index:name:' + data.name, data.id);
   await client.rPush('marketList', data.id);
 };
-
-client.on('connect', () => {
-  console.log('Redis 서버와 연결되었습니다.');
-  listenForMessages().catch(console.error); // 연결되었을 때 대기 시작
-});
