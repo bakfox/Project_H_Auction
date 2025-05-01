@@ -30,6 +30,7 @@ async function listenForMessages() {
       while (true) {
         const res = await client.blPop('SELL', 0);
         const message = JSON.parse(res);
+        console.log(message);
         sellHandler(message);
       }
     })(),
@@ -37,6 +38,7 @@ async function listenForMessages() {
       while (true) {
         const res = await client.blPop('BUY', 0);
         const message = JSON.parse(res);
+        console.log(message);
         buyHandler(message);
       }
     })(),
