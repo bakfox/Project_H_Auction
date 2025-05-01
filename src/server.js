@@ -46,7 +46,7 @@ async function listenForMessages() {
     (async () => {
       while (true) {
         try {
-          console.log("대기중 buy");
+          console.log("대기중 buy",client);
           const res = await client.blPop('BUY', 0);
           if (!res || res.length < 2) {
             console.warn("BUY 응답 형식이 이상함:", res);
