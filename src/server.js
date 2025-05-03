@@ -15,14 +15,11 @@ const client = createClient({
 
 //에러 처리용도
 client.on('error', (err) => console.log('Redis Error:', err));
-
-client.on('connect', () => {
-  console.log('Redis 서버와 연결되었습니다.');
-  listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
-});
+listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
 
 await client.connect();
 console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
+listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
 
 // 초기화 한번
 await client.flushDb();
@@ -36,12 +33,12 @@ async function listenForMessages(redisClient) {
         try {
           console.log("대기중 sell");
           const res = await redisClient.blPop('SELL', 0);
-          if (!res || res.length < 2) {
+          if (!res || !res.element) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          const message = JSON.parse(res[1]);
-          console.log("받은 SELL 메시지:", message);
+          const message = JSON.parse(res.element);
+          
           await sellHandler(message);
         } catch (err) {
           console.error("SELL 처리 중 오류:", err);
@@ -53,12 +50,12 @@ async function listenForMessages(redisClient) {
         try {
           console.log("대기중 buy");
           const res = await redisClient.blPop('BUY', 0);
-          console.log("받은 BUY 메시지:", res);
-          if (!res || res.length < 2) {
-            console.warn("BUY 응답 형식이 이상함:", res);
+          if (!res || !res.element) {
+            console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          const message = JSON.parse(res[1]);
+          const message = JSON.parse(res.element);
+          
           console.log("받은 BUY 메시지:", message);
           await buyHandler(message);
         } catch (err) {
