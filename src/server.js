@@ -15,7 +15,6 @@ const client = createClient({
 
 //에러 처리용도
 client.on('error', (err) => console.log('Redis Error:', err));
-listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
 
 await client.connect();
 console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
@@ -77,7 +76,6 @@ export async function sendData(type,targetServerId, data ) {
     return;
   }
   // 자기 자신 서버 리스폰 구독하면 받을수 있음
-  message.senderId = serverId;
   await client.rPush(type + `:RES:${targetServerId}`, JSON.stringify(data));
 }
 
