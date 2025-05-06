@@ -6,6 +6,7 @@ import { getSearchDataHandler } from './handler/getSearch_handler.js';
 import { sellHandler } from './handler/sell_handler.js';
 import { getDataHandler } from './handler/get_handler.js';
 import { initMarketSesion } from './util/market/getAllData.js';
+import { v1 } from 'uuid';
 
 dotenv.config();
 
@@ -27,13 +28,13 @@ initMarketSesion();
 await client.rPush('BUY', "hello");
 
 // 대기 처리
-async function listenForMessages() {
+async function listenForMessages(redisClient) {
   await Promise.all([
     (async () => {
       while (true) {
         try {
           console.log("대기중 sell");
-          const res = await client.blPop('SELL', 0);
+          const res = await redisClient.blPop('SELL', 0);
           if (!res || !res.length <= 1) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
@@ -50,7 +51,7 @@ async function listenForMessages() {
       while (true) {
         try {
           console.log("대기중 buy");
-          const res = await client.blPop('BUY', 0);
+          const res = await redisClient.blPop('BUY', 0);
           if (!res || !res.length <= 1) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
@@ -120,4 +121,4 @@ export const setData = async (data) => {
   await client.rPush('marketList', data.id);
 };
 
-listenForMessages().catch(console.error); // 연결되었을 때 대기 시작
+listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
