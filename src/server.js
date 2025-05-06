@@ -34,11 +34,11 @@ async function listenForMessages() {
         try {
           console.log("대기중 sell");
           const res = await client.blPop('SELL', 0);
-          if (!res || !res.element) {
+          if (!res || !res.length <= 1) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          const message = JSON.parse(res.element);
+          const message = JSON.parse(res[1]);
           
           await sellHandler(message);
         } catch (err) {
@@ -51,11 +51,11 @@ async function listenForMessages() {
         try {
           console.log("대기중 buy");
           const res = await client.blPop('BUY', 0);
-          if (!res || !res.element) {
+          if (!res || !res.length <= 1) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          const message = JSON.parse(res.element);
+          const message = JSON.parse(res[1]);
           
           console.log("받은 BUY 메시지:", message);
           await buyHandler(message);
