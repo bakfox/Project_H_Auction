@@ -35,7 +35,7 @@ async function listenForMessages(redisClient) {
         try {
           console.log("대기중 sell");
           const res = await redisClient.blPop('SELL', 0);
-          if (!res || !res.length <= 1) {
+          if (!res || res.length < 2) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
@@ -52,7 +52,7 @@ async function listenForMessages(redisClient) {
         try {
           console.log("대기중 buy");
           const res = await redisClient.blPop('BUY', 0);
-          if (!res || !res.length <= 1) {
+          if (!res || res.length < 2) {
             console.warn("SELL 응답 형식이 이상함:", res);
             continue;
           }
