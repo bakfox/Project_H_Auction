@@ -19,12 +19,13 @@ client.on('error', (err) => console.log('Redis Error:', err));
 
 await client.connect();
 console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
-listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
+listenForMessages(client).catch(console.log); // 연결되었을 때 대기 시작
 
 // 초기화 한번
 await client.flushDb();
 initMarketSesion();
 
+await client.rPush('BUY', "hello");
 await client.rPush('BUY', "hello");
 
 // 대기 처리
