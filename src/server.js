@@ -19,7 +19,7 @@ client.on('error', (err) => console.log('Redis Error:', err));
 
 await client.connect();
 console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
-
+listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
 
 // 초기화 한번
 await client.flushDb();
@@ -120,5 +120,3 @@ export const setData = async (data) => {
   await client.sAdd('index:name:' + data.name, data.id);
   await client.rPush('marketList', data.id);
 };
-
-listenForMessages(client).catch(console.error); // 연결되었을 때 대기 시작
