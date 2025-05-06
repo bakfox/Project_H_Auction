@@ -18,12 +18,13 @@ const client = createClient({
 client.on('error', (err) => console.log('Redis Error:', err));
 
 await client.connect();
+console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
 
 const blpopClient = client.duplicate();
 await blpopClient.connect();
+console.log(`blpopClient 연결 : ${config.redis.host + config.redis.port}`);
 
-console.log(`레디스 연결 : ${config.redis.host + config.redis.port}`);
-listenForMessages(blpopClient).catch(console.log); // 연결되었을 때 대기 시작
+listenForMessages().catch(console.log); // 연결되었을 때 대기 시작
 
 // 초기화 한번
 //await client.flushDb();
@@ -33,13 +34,13 @@ await client.rPush('BUY', "hello");
 await client.rPush('BUY', "hello");
 
 // 대기 처리
-async function listenForMessages(redisClient) {
+async function listenForMessages() {
   await Promise.all([
     (async () => {
       while (true) {
         try {
           console.log("대기중 sell");
-          const res = await redisClient.blPop('SELL', 0);
+          const res = await blpopClient.blPop('SELL', 0);
           if (!res || res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
@@ -56,7 +57,7 @@ async function listenForMessages(redisClient) {
       while (true) {
         try {
           console.log("대기중 buy");
-          const res = await redisClient.blPop('BUY', 0);
+          const res = await blpopClient.blPop('BUY', 0);
           if (!res || res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
