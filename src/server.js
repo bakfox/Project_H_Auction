@@ -40,7 +40,7 @@ async function listenForMessages() {
       while (true) {
         try {
           console.log("대기중 sell");
-          const res = await blpopClient.blPop('SELL', 0);
+          const res = await blpopClient.blPop('SELL', 2);
           if (!res || res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
@@ -57,7 +57,7 @@ async function listenForMessages() {
       while (true) {
         try {
           console.log("대기중 buy");
-          const res = await blpopClient.blPop('BUY', 0);
+          const res = await blpopClient.blPop('BUY', 2);
           if (!res || res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
