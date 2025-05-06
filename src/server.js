@@ -37,14 +37,14 @@ async function listenForMessages(redisClient) {
           console.log("대기중 sell");
           const res = await redisClient.blPop('SELL', 0);
           if (!res || res.length < 2) {
-            console.warn("SELL 응답 형식이 이상함:", res);
+            console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
           const message = JSON.parse(res[1]);
           
           await sellHandler(message);
         } catch (err) {
-          console.error("SELL 처리 중 오류:", err);
+          console.log("SELL 처리 중 오류:", err);
         }
       }
     })(),
@@ -54,7 +54,7 @@ async function listenForMessages(redisClient) {
           console.log("대기중 buy");
           const res = await redisClient.blPop('BUY', 0);
           if (!res || res.length < 2) {
-            console.warn("SELL 응답 형식이 이상함:", res);
+            console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
           const message = JSON.parse(res[1]);
@@ -62,7 +62,7 @@ async function listenForMessages(redisClient) {
           console.log("받은 BUY 메시지:", message);
           await buyHandler(message);
         } catch (err) {
-          console.error("BUY 처리 중 오류:", err);
+          console.log("BUY 처리 중 오류:", err);
         }
       }
     })(),
