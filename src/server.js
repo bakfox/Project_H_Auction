@@ -40,11 +40,11 @@ async function listenForMessages() {
           if(!res){
             continue;
           }
-          if (res.length < 2) {
+          if (res.element === null) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          const message = JSON.parse(res[1]);
+          const message = JSON.parse(res.element);
           
           await sellHandler(message);
         } catch (err) {
@@ -59,12 +59,11 @@ async function listenForMessages() {
           if(!res){
             continue;
           }
-          if (!res || res.length < 2) {
+          if (res.element === null) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
-          console.log("받은 BUY 데이터:", res);
-          const message = JSON.parse(res[1]);
+          const message = JSON.parse(res.element);
           
           console.log("받은 BUY 메시지:", message);
           await buyHandler(message);
