@@ -2,10 +2,9 @@ import { config } from '../config/config.js';
 import { sellInMarket } from '../db/marketplace/market.db.js';
 import { dataDelet, getdata, sendData } from '../server.js';
 
-export const buyHandler = async (jsonData) => {
+export const buyHandler = async (data) => {
   let isSuccess = true;
   try {
-    const data = JSON.parse(jsonData);
     const marketData = await getdata(data.marketId);
     if (!marketData) {
       isSuccess = false;
