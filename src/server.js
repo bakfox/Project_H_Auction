@@ -30,18 +30,17 @@ listenForMessages().catch(console.log); // 연결되었을 때 대기 시작
 //await client.flushDb();
 initMarketSesion();
 
-await client.rPush('BUY', "hello");
-await client.rPush('BUY', "hello");
-
 // 대기 처리
 async function listenForMessages() {
   await Promise.all([
     (async () => {
       while (true) {
         try {
-          console.log("대기중 sell");
-          const res = await blpopClient.blPop('SELL', 2);
-          if (!res || res.length < 2) {
+          const res = await blpopClient.blPop('SELL', 1);
+          if(!res){
+            continue;
+          }
+          if (res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
@@ -56,8 +55,10 @@ async function listenForMessages() {
     (async () => {
       while (true) {
         try {
-          console.log("대기중 buy");
-          const res = await blpopClient.blPop('BUY', 2);
+          const res = await blpopClient.blPop('BUY', 1);
+          if(!res){
+            continue;
+          }
           if (!res || res.length < 2) {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
