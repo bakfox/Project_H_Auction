@@ -63,6 +63,7 @@ async function listenForMessages() {
             console.log("SELL 응답 형식이 이상함:", res);
             continue;
           }
+          console.log("받은 BUY 데이터:", res);
           const message = JSON.parse(res[1]);
           
           console.log("받은 BUY 메시지:", message);
