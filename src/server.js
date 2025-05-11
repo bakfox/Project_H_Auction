@@ -108,12 +108,12 @@ export const getdata = async (id) => {
 /**레디스 데이터 넣기 용도!*/
 export const setData = async (data) => {
   await client.hSet(data.id, {
-    charId: data.charId,
+    charId: String(data.charId),
     name: data.name,
-    itemIndex: data.itemIndex,
-    rarity: data.rarity,
-    price: data.price,
-    endTime: data.endTime.toISOString()
+    itemIndex: String(data.itemIndex),
+    rarity: String(data.rarity),
+    price: String(data.price),
+    endTime: data.endTime.toISOString() // 이 부분이 핵심!
   });
   //인덱스 추가
   await client.sAdd('index:name:' + data.name, data.id);
