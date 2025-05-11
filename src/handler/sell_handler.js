@@ -26,7 +26,7 @@ export const sellHandler = async (data) => {
       isSuccess = false;
       throw new Error('거래 실패입니다!');
     }
-    const temp = new MarketData({
+    new MarketData({
       id: makretDatas.insertId,
       charId: data.charId,
       itemIndex: itemData.itemId,
@@ -35,7 +35,6 @@ export const sellHandler = async (data) => {
       endTime: now,
       name: data.name,
     });
-    console.log(temp,"새로운 / 기존 ",makretDatas);
     sendData(config.type.sell, requestServerId, {
       charId: data.charId,
       inventoryId: data.inventoryId,

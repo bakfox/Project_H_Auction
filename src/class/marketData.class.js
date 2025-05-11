@@ -3,6 +3,7 @@ import { dataDelet, setData } from '../server.js';
 
 class MarketData {
   constructor(data) {
+    console.log(data);
     this.id = data.id;
     this.charId = data.charId;
     this.name = data.name;
