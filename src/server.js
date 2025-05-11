@@ -107,22 +107,14 @@ export const getdata = async (id) => {
 };
 /**레디스 데이터 넣기 용도!*/
 export const setData = async (data) => {
-  console.log(data);
-  await client.hSet(
-    data.id,
-    'charId',
-    data.charId,
-    'name',
-    data.name,
-    'itemIndex',
-    data.itemIndex,
-    'rarity',
-    data.rarity,
-    'price',
-    data.price,
-    'endTime',
-    data.endTime.toISOString(),
-  );
+  await client.hSet(data.id, {
+    charId: data.charId,
+    name: data.name,
+    itemIndex: data.itemIndex,
+    rarity: data.rarity,
+    price: data.price,
+    endTime: data.endTime.toISOString()
+  });
   //인덱스 추가
   await client.sAdd('index:name:' + data.name, data.id);
   await client.rPush('marketList', data.id);
