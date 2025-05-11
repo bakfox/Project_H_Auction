@@ -1,6 +1,6 @@
 import MarketData from '../class/MarketData.class.js';
 import { config } from '../config/config.js';
-import { getInventoryFromCharId } from '../db/marketplace/market.db.js';
+import { addMarket, getInventoryFromCharId } from '../db/marketplace/market.db.js';
 import { sendData } from '../server.js';
 
 export const sellHandler = async (data) => {
