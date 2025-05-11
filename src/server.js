@@ -116,6 +116,6 @@ export const setData = async (data) => {
     endTime: data.endTime.toISOString()
   });
   //인덱스 추가
-  await client.sAdd('index:name:' + data.name, data.id);
-  await client.rPush('marketList', data.id);
+  await client.sAdd('index:name:' + data.name, String(data.id));
+  await client.rPush('marketList', String(data.id));
 };
