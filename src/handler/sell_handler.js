@@ -42,6 +42,7 @@ export const sellHandler = async (data) => {
       isSuccess,
     });
   } catch (err) {
+    console.log(temp,"새로운 / 기존 ",makretDatas);
     sendData(config.type.sell,requestServerId, {
       isSuccess,
     });
